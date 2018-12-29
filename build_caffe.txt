@@ -1,0 +1,209 @@
+1. build preparation
+
+cat /proc/cpuinfo
+sudo apt-get install cmake
+sudo apt-get install autoconf automake libtool curl make g++ unzip git
+sudo apt-get install libboost-all-dev
+sudo apt-get install gfortran
+
+=======================================================================================================================================
+
+2. download packages 
+
+A. get caffe and put packages in caffe/lib & caffe/lib/archive 
+https://github.com/BVLC/caffe/releases
+https://github.com/BVLC/caffe/archive/rc3.tar.gz
+
+B. download boost and build it or use apt-get to install 
+sudo apt-get install libboost-all-dev
+http://www.boost.org/users/history/version_1_60_0.html
+./bootstrap.sh
+./b2 
+
+C. download protobuf and build it  
+https://github.com/google/protobuf/releases
+https://github.com/protocolbuffers/protobuf/archive/v3.0.0.tar.gz
+edit ./autogen.sh 
+  curl $curlopts -O https://src.fedoraproject.org/repo/pkgs/gmock/gmock-1.7.0.zip/073b984d8798ea1594f5e44d85b20d66/gmock-1.7.0.zip
+./autogen.sh
+./configure
+make
+
+D. download gflags and build it 
+https://github.com/gflags/gflags/releases
+https://github.com/gflags/gflags/archive/v2.1.2.tar.gz
+mkdir build && cd build
+cmake ..
+modify /home/qi/dnn/caffe/gflags-2.1.2/build/CMakeFiles/gflags-static.dir/flags.make to add "-fPIC"
+make
+
+E. download glog and build it 
+https://github.com/google/glog/releases
+https://github.com/google/glog/archive/v0.3.4.tar.gz
+./configure && make
+
+F. download leveldb and build 
+https://github.com/google/leveldb/releases
+https://github.com/google/leveldb/archive/v1.19.tar.gz
+make
+
+G. download lmdb and build it 
+https://github.com/LMDB/lmdb/releases
+https://github.com/LMDB/lmdb/archive/LMDB_0.9.18.tar.gz
+cd libraries/liblmdb && make
+
+H. download snappy and build it 
+https://github.com/google/snappy/releases
+https://github.com/google/snappy/archive/1.1.3.tar.gz
+./autogen.sh
+./configure
+make
+
+I. download hdf5 and build it or apt-get to install   
+sudo apt-get install libhdf5-dev
+https://www.hdfgroup.org/HDF5/release/obtainsrc.html
+#http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar.bz2
+https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.17/src/hdf5-1.8.17.tar.bz2
+./configure && make 
+mkdir hdf5 && cd hdf5
+ln -s ~/github/caffe/hdf5-1.8.17/bin/ .
+mkdir include && cd include
+ln -s ~/github/caffe/hdf5-1.8.17/src/*.h .
+ln -s ~/github/caffe/hdf5-1.8.17/hl/src/*.h .
+cd .. 
+mkdir lib && cd lib
+ln -s ~/github/caffe/hdf5-1.8.17/src/.libs/libhdf5.* .
+ln -s ~/github/caffe/hdf5-1.8.17/hl/src/.libs/libhdf5_hl.* .
+
+-DHDF5_FIND_DEBUG=ON -DCPU_ONLY=ON ..
+-- HDF5: Using hdf5 compiler wrapper to determine CXX configuration (TODO: change to debug how to add CMakefile for HDF5) 
+-- HDF5_DIR: HDF5_DIR-NOTFOUND
+-- HDF5_DEFINITIONS: -D_FORTIFY_SOURCE=2
+-- HDF5_INCLUDE_DIRS: /usr/include/hdf5/serial
+-- HDF5_LIBRARIES: /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_cpp.so;/usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5.so;/usr/lib/x86_64-linux-gnu/libpthread.so;/usr/lib/x86_64-linux-gnu/libsz.so;/usr/lib/x86_64-linux-gnu/libz.so;/usr/lib/x86_64-linux-gnu/libdl.so;/usr/lib/x86_64-linux-gnu/libm.so
+-- HDF5_HL_LIBRARIES: /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_hl_cpp.so;/usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_hl.so
+-- HDF5_C_DEFINITIONS: -D_FORTIFY_SOURCE=2
+-- HDF5_C_INCLUDE_DIR: 
+-- HDF5_C_INCLUDE_DIRS: /usr/include/hdf5/serial
+-- HDF5_C_LIBRARY: 
+-- HDF5_C_LIBRARIES: /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5.so;/usr/lib/x86_64-linux-gnu/libpthread.so;/usr/lib/x86_64-linux-gnu/libsz.so;/usr/lib/x86_64-linux-gnu/libz.so;/usr/lib/x86_64-linux-gnu/libdl.so;/usr/lib/x86_64-linux-gnu/libm.so
+-- HDF5_C_HL_LIBRARY: 
+-- HDF5_C_HL_LIBRARIES: /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_hl.so
+-- HDF5_CXX_DEFINITIONS: -D_FORTIFY_SOURCE=2
+-- HDF5_CXX_INCLUDE_DIR: 
+-- HDF5_CXX_INCLUDE_DIRS: /usr/include/hdf5/serial
+-- HDF5_CXX_LIBRARY: 
+-- HDF5_CXX_LIBRARIES: /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_cpp.so;/usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5.so;/usr/lib/x86_64-linux-gnu/libpthread.so;/usr/lib/x86_64-linux-gnu/libsz.so;/usr/lib/x86_64-linux-gnu/libz.so;/usr/lib/x86_64-linux-gnu/libdl.so;/usr/lib/x86_64-linux-gnu/libm.so
+-- HDF5_CXX_HL_LIBRARY: 
+-- HDF5_CXX_HL_LIBRARIES: /usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_hl_cpp.so;/usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5_hl.so
+
+J. download atlas and build it  
+https://sourceforge.net/projects/math-atlas/files/
+https://sourceforge.net/projects/math-atlas/files/Stable/3.10.3/atlas3.10.3.tar.bz2/download
+mkdir build && cd build
+../configure -Fa alg -fPIC --cripple-atlas-performance
+make -j8
+
+K. download openCV or use github opencv sharing (TODO: change to use share ..)
+https://github.com/Itseez/opencv/archive/2.4.13.zip
+mkdir build && cd build
+cmake -D CMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=../install -DWITH_CUDA=OFF ..
+make -j8 install
+
+L. appendix 
+https://github.com/xianyi/OpenBLAS/wiki/User-Manual
+OpenBLAS-0.2.18.tar.gz
+make
+
+modify ./modules/core/include/opencv2/core/core.hpp as follows:
+
+#ifdef FLOAT
+#undef FLOAT
+#endif
+class CV_EXPORTS_W_SIMPLE FileNode
+{
+
+due to OpenBLAS cblas.h define FLOAT to float 
+
+=======================================================================================================================================
+
+3. the command how to make caffe 
+
+A. environment setup
+#export PATH=$PATH:/home/qi/github/caffe/lib/hdf5-1.8.17/hdf5
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/qi/github/caffe/lib/protobuf-3.0.0/src/.libs
+
+#modify CMakefiles => link_directories($(PROTOBUF_INCLUDE_DIR)/.libs)
+
+B. caffe with boost1.60.0 & openBLAS-0.2.18 
+cmake -DPROTOBUF_INCLUDE_DIR=/home/qi/dnn/caffe/protobuf-3.0.0/src -DPROTOBUF_LIBRARY=/home/qi/dnn/caffe/protobuf-3.0.0/src/.libs/libprotobuf.so -DPROTOBUF_PROTOC_EXECUTABLE=/home/qi/dnn/caffe/protobuf-3.0.0/src/.libs/protoc -DGFLAGS_INCLUDE_DIR=/home/qi/dnn/caffe/gflags-2.1.2/build/include -DGFLAGS_LIBRARY=/home/qi/dnn/caffe/gflags-2.1.2/build/lib/libgflags.a -DGLOG_INCLUDE_DIR=/home/qi/dnn/caffe/glog-0.3.4/src -DGLOG_LIBRARY=/home/qi/dnn/caffe/glog-0.3.4/.libs/libglog.so -DLMDB_INCLUDE_DIR=/home/qi/dnn/caffe/lmdb-LMDB_0.9.18/libraries/liblmdb -DLMDB_LIBRARIES=/home/qi/dnn/caffe/lmdb-LMDB_0.9.18/libraries/liblmdb/liblmdb.so -DLevelDB_INCLUDE=/home/qi/dnn/caffe/leveldb-1.19/include -DLevelDB_LIBRARY=/home/qi/dnn/caffe/leveldb-1.19/out-shared/libleveldb.so -DSnappy_INCLUDE_DIR=/home/qi/dnn/caffe/snappy-1.1.3 -DSnappy_LIBRARIES=/home/qi/dnn/caffe/snappy-1.1.3/.libs/libsnappy.so -DOpenCV_DIR=/home/qi/dnn/caffe/opencv-2.4.13/build .. -DBLAS=Open -DOpenBLAS_INCLUDE_DIR=/home/qi/dnn/caffe/OpenBLAS-0.2.18 -DOpenBLAS_LIB=/home/qi/dnn/caffe/OpenBLAS-0.2.18/libopenblas.so -DBOOST_ROOT=/home/qi/dnn/caffe/boost_1_60_0 -DCMAKE_BUILD_TYPE=Debug -DCPU_ONLY=ON ..
+  
+C. caffe with opencv-3.4.3
+cmake -DPROTOBUF_INCLUDE_DIR=/home/qi/github/caffe/lib/protobuf-3.0.0/src -DPROTOBUF_LIBRARY=/home/qi/github/caffe/lib/protobuf-3.0.0/src/.libs/libprotobuf.so -DPROTOBUF_PROTOC_EXECUTABLE=/home/qi/github/caffe/lib/protobuf-3.0.0/src/.libs/protoc -DGFLAGS_INCLUDE_DIR=/home/qi/github/caffe/lib/gflags-2.1.2/build/include -DGFLAGS_LIBRARY=/home/qi/github/caffe/lib/gflags-2.1.2/build/lib/libgflags.a -DGLOG_INCLUDE_DIR=/home/qi/github/caffe/lib/glog-0.3.4/src -DGLOG_LIBRARY=/home/qi/github/caffe/lib/glog-0.3.4/.libs/libglog.so -DLMDB_INCLUDE_DIR=/home/qi/github/caffe/lib/lmdb-LMDB_0.9.18/libraries/liblmdb -DLMDB_LIBRARIES=/home/qi/github/caffe/lib/lmdb-LMDB_0.9.18/libraries/liblmdb/liblmdb.so -DLevelDB_INCLUDE=/home/qi/github/caffe/lib/leveldb-1.19/include -DLevelDB_LIBRARY=/home/qi/github/caffe/lib/leveldb-1.19/out-shared/libleveldb.so -DSnappy_INCLUDE_DIR=/home/qi/github/caffe/lib/snappy-1.1.3 -DSnappy_LIBRARIES=/home/qi/github/caffe/lib/snappy-1.1.3/.libs/libsnappy.so -DOpenCV_DIR=/home/qi/github/caffe/lib/opencv-3.4.3/build -DAtlas_CBLAS_INCLUDE_DIR=/home/qi/github/caffe/lib/ATLAS/include -DAtlas_CLAPACK_INCLUDE_DIR=/home/qi/github/caffe/lib/ATLAS/include -DAtlas_CBLAS_LIBRARY=/home/qi/github/caffe/lib/ATLAS/build/lib/libcblas.a -DAtlas_BLAS_LIBRARY=/home/qi/github/caffe/lib/ATLAS/build/lib/libatlas.a -DAtlas_LAPACK_LIBRARY=/home/qi/github/caffe/lib/ATLAS/build/lib/liblapack.a -DCMAKE_BUILD_TYPE=Debug -DCPU_ONLY=ON ..
+
+D. caffe with opencv-2.4.13.6
+cmake -DPROTOBUF_INCLUDE_DIR=/home/qi/github/caffe/lib/protobuf-3.0.0/src -DPROTOBUF_LIBRARY=/home/qi/github/caffe/lib/protobuf-3.0.0/src/.libs/libprotobuf.so -DPROTOBUF_PROTOC_EXECUTABLE=/home/qi/github/caffe/lib/protobuf-3.0.0/src/.libs/protoc -DGFLAGS_INCLUDE_DIR=/home/qi/github/caffe/lib/gflags-2.1.2/build/include -DGFLAGS_LIBRARY=/home/qi/github/caffe/lib/gflags-2.1.2/build/lib/libgflags.a -DGLOG_INCLUDE_DIR=/home/qi/github/caffe/lib/glog-0.3.4/src -DGLOG_LIBRARY=/home/qi/github/caffe/lib/glog-0.3.4/.libs/libglog.so -DLMDB_INCLUDE_DIR=/home/qi/github/caffe/lib/lmdb-LMDB_0.9.18/libraries/liblmdb -DLMDB_LIBRARIES=/home/qi/github/caffe/lib/lmdb-LMDB_0.9.18/libraries/liblmdb/liblmdb.so -DLevelDB_INCLUDE=/home/qi/github/caffe/lib/leveldb-1.19/include -DLevelDB_LIBRARY=/home/qi/github/caffe/lib/leveldb-1.19/out-shared/libleveldb.so -DSnappy_INCLUDE_DIR=/home/qi/github/caffe/lib/snappy-1.1.3 -DSnappy_LIBRARIES=/home/qi/github/caffe/lib/snappy-1.1.3/.libs/libsnappy.so -DOpenCV_DIR=/home/qi/github/library/opencv-2.4.13.6/build -DAtlas_CBLAS_INCLUDE_DIR=/home/qi/github/caffe/lib/ATLAS/include -DAtlas_CLAPACK_INCLUDE_DIR=/home/qi/github/caffe/lib/ATLAS/include -DAtlas_CBLAS_LIBRARY=/home/qi/github/caffe/lib/ATLAS/build/lib/libcblas.a -DAtlas_BLAS_LIBRARY=/home/qi/github/caffe/lib/ATLAS/build/lib/libatlas.a -DAtlas_LAPACK_LIBRARY=/home/qi/github/caffe/lib/ATLAS/build/lib/liblapack.a -DCMAKE_BUILD_TYPE=Debug -DCPU_ONLY=ON ..
+
+E. build caffe   
+check if -DWITH_PYTHON_LAYER to build by "make VERBOSE=1"
+check if there is pycaffe target in Makefile  
+make -j8
+make runtest
+WITH_PYTHON_LAYER=1 make && make pycaffe 
+
+=======================================================================================================================================
+
+4. the command to build python environment in caffe 
+
+A. protobuf python build 
+cd /home/qi/github/caffe/lib/protobuf-3.0.0/python 
+python setup.py build
+goto protobuf/python folder => python setup.py build
+   
+B. caffe python build 
+cd /home/qi/github/caffe/build
+make pycaffe
+or 
+WITH_PYTHON_LAYER=1 make && make pycaffe 
+
+C. set python path or patch for access caffe & protobuf python 
+
+=======================================================================================================================================
+
+5. the test command 
+
+A. alexnet, googlenet and caffenet test commands 
+./build/examples/cpp_classification/classification models/bvlc_alexnet/deploy.prototxt models/bvlc_alexnet/bvlc_alexnet.caffemodel data/ilsvrc12/imagenet_mean.binaryproto data/ilsvrc12/synset_words.txt examples/images/cat.jpg
+
+./build/examples/cpp_classification/classification models/bvlc_googlenet/deploy.prototxt models/bvlc_googlenet/bvlc_googlenet.caffemodel data/ilsvrc12/imagenet_mean.binaryproto data/ilsvrc12/synset_words.txt examples/images/cat.jpg
+
+./build/examples/cpp_classification/classification models/bvlc_reference_caffenet/deploy.prototxt models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel data/ilsvrc12/imagenet_mean.binaryproto data/ilsvrc12/synset_words.txt examples/images/cat.jpg
+
+=======================================================================================================================================
+
+6. caffe reference links 
+
+https://github.com/BVLC/caffe/wiki/Model-Zoo
+
+cmake -DPROTOBUF_INCLUDE_DIR=/home/qi/github/caffe/lib/protobuf-3.0.0/src 
+      -DPROTOBUF_LIBRARY=/home/qi/github/caffe/lib/protobuf-3.0.0/src/.libs/libprotobuf.so 
+      -DPROTOBUF_PROTOC_EXECUTABLE=/home/qi/github/caffe/lib/protobuf-3.0.0/src/.libs/protoc 
+      -DGFLAGS_INCLUDE_DIR=/home/qi/github/caffe/lib/gflags-2.1.2/build/include 
+      -DGFLAGS_LIBRARY=/home/qi/github/caffe/lib/gflags-2.1.2/build/lib/libgflags.a 
+      -DGLOG_INCLUDE_DIR=/home/qi/github/caffe/lib/glog-0.3.4/src 
+      -DGLOG_LIBRARY=/home/qi/github/caffe/lib/glog-0.3.4/.libs/libglog.so 
+      -DLMDB_INCLUDE_DIR=/home/qi/github/caffe/lib/lmdb-LMDB_0.9.18/libraries/liblmdb 
+      -DLMDB_LIBRARIES=/home/qi/github/caffe/lib/lmdb-LMDB_0.9.18/libraries/liblmdb/liblmdb.so 
+      -DLevelDB_INCLUDE=/home/qi/github/caffe/lib/leveldb-1.19/include 
+      -DLevelDB_LIBRARY=/home/qi/github/caffe/lib/leveldb-1.19/out-shared/libleveldb.so 
+      -DSnappy_INCLUDE_DIR=/home/qi/github/caffe/lib/snappy-1.1.3 
+      -DSnappy_LIBRARIES=/home/qi/github/caffe/lib/snappy-1.1.3/.libs/libsnappy.so 
+      -DOpenCV_DIR=/home/qi/github/library/opencv-2.4.13.6/build 
+      -DAtlas_CBLAS_INCLUDE_DIR=/home/qi/github/caffe/lib/ATLAS/include 
+      -DAtlas_CLAPACK_INCLUDE_DIR=/home/qi/github/caffe/lib/ATLAS/include 
+      -DAtlas_CBLAS_LIBRARY=/home/qi/github/caffe/lib/ATLAS/build/lib/libcblas.a 
+      -DAtlas_BLAS_LIBRARY=/home/qi/github/caffe/lib/ATLAS/build/lib/libatlas.a 
+      -DAtlas_LAPACK_LIBRARY=/home/qi/github/caffe/lib/ATLAS/build/lib/liblapack.a 
+      -DCMAKE_BUILD_TYPE=Debug ..
+      -DCPU_ONLY=ON ..
+
