@@ -3,8 +3,10 @@ import tempfile
 import os
 import six
 
+# The caffe module needs to be on the Python path; we'll add it here explicitly
+import sys
+sys.path.insert(0, '../../../python')
 import caffe
-
 
 class SimpleLayer(caffe.Layer):
     """A layer that just multiplies by ten"""
@@ -166,3 +168,6 @@ class TestPythonLayer(unittest.TestCase):
         for phase in caffe.TRAIN, caffe.TEST:
             net = caffe.Net(net_file, phase)
             self.assertEqual(net.forward()['phase'], phase)
+
+if __name__ == '__main__':
+    unittest.main()

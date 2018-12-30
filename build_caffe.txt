@@ -134,7 +134,17 @@ make pycaffe
 or 
 WITH_PYTHON_LAYER=1 make && make pycaffe 
 
-C. set python path or patch for access caffe & protobuf python 
+C. install python package 
+sudo apt-get install python-pip
+sudo pip install scikit-image
+sudo pip install numpy
+sudo apt-get install python-pandas
+sudo apt-get install graphviz
+#sudo pip install pandas
+sudo pip install pydotplus
+
+D. set python path or patch for access caffe & protobuf python 
+source python/env.sh 
 
 =======================================================================================================================================
 
@@ -150,6 +160,10 @@ A. alexnet, googlenet and caffenet test commands
 =======================================================================================================================================
 
 6. caffe reference links 
+
+A. more examples 
+https://github.com/shelhamer/fcn.berkeleyvision.org
+https://github.com/twtygqyy/obg_fcn
 
 https://github.com/BVLC/caffe/wiki/Model-Zoo
 
