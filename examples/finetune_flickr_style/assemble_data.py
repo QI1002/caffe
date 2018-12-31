@@ -13,7 +13,8 @@ from skimage import io
 import multiprocessing
 
 # Flickr returns a special image if the request is unavailable.
-MISSING_IMAGE_SHA1 = '6a92790b1c2a301c6e7ddef645dca1f53ea97ac2'
+#MISSING_IMAGE_SHA1 = '6a92790b1c2a301c6e7ddef645dca1f53ea97ac2'
+MISSING_IMAGE_SHA1 = '10f3f7f79e6528aa9d828316248997568ac0d833'
 
 example_dirname = os.path.abspath(os.path.dirname(__file__))
 caffe_dirname = os.path.abspath(os.path.join(example_dirname, '../..'))
@@ -33,6 +34,7 @@ def download_image(args_tuple):
     except KeyboardInterrupt:
         raise Exception()  # multiprocessing doesn't catch keyboard exceptions
     except:
+        os.remove(filename)
         return False
 
 

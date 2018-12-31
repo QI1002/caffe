@@ -1,3 +1,8 @@
+
+caffe_root = '../../..'
+import sys
+sys.path.insert(0, cafe_root + 'python')
+
 import caffe
 from caffe import layers as L, params as P
 from caffe.coord_map import crop

@@ -9,14 +9,14 @@ plt.rcParams['image.cmap'] = 'gray'  # use grayscale output rather than a (poten
 
 import os
 import sys
-caffe_root = '/home/xujiu01/library/caffe/'  # this file should be run from {caffe_root}/examples (otherwise change this line)
+caffe_root = '../../../'  # this file should be run from {caffe_root}/examples (otherwise change this line)
 sys.path.insert(0, caffe_root + 'python')
 
 import caffe
 
-caffe.set_mode_gpu()
-caffe.set_device(0)
-
+#caffe.set_mode_gpu()
+#caffe.set_device(0)
+caffe.set_logdir(sys.argv[0], os.path.abspath('./log'))
 
 model_def = 'deploy.prototxt'
 model_weights = 'voc-fcn8s-obg2s.caffemodel'
@@ -39,7 +39,7 @@ transformer.set_channel_swap('data', (2,1,0))  # swap channels from RGB to BGR
 image = caffe.io.load_image('2007_000129.jpg')
 
 transformed_image = transformer.preprocess('data', image)
-plt.imshow(image)
+#plt.imshow(image)
 # copy the image data into the memory allocated for the net
 net.blobs['data'].data[...] = transformed_image
 
@@ -50,8 +50,10 @@ mask = net.blobs['score'].data[0]
 
 classed = np.argmax(mask, axis=0)
 
-names = dict()
-all_labels = ["0", "1","2","3", "4","5", "6","7","8", "9","10", "11","12","13", "14","15", "16","17","18", "19","20"]
+#names = dict()
+#all_labels = ["0", "1","2","3", "4","5", "6","7","8", "9","10", "11","12","13", "14","15", "16","17","18", "19","20"]
+nums = open(r'../data/pascal/classes.txt').readlines()
+all_labels = [all_labels[i] + ": " + names[i] for i in range(0, len(all_labels))]
 scores = np.unique(classed)
 labels = [all_labels[s] for s in scores]
 num_scores = len(scores)
@@ -62,7 +64,9 @@ def rescore (c):
 rescore = np.vectorize(rescore)
 
 painted = rescore(classed)
-plt.imshow(painted, cmap=plt.cm.get_cmap('jet', num_scores))
+plt.subplot(1,2,1), plt.imshow(image)
+plt.subplot(1,2,2), plt.imshow(painted, cmap=plt.cm.get_cmap('jet', num_scores)),aspect=float(image.shape[0])/float(image.shape[1]))
+#plt.imshow(painted, cmap=plt.cm.get_cmap('jet', num_scores))
 
 # setup legend
 formatter = plt.FuncFormatter(lambda val, loc: labels[val])

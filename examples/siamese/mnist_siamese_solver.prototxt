@@ -22,4 +22,4 @@ max_iter: 50000
 snapshot: 5000
 snapshot_prefix: "examples/siamese/mnist_siamese"
 # solver mode: CPU or GPU
-solver_mode: GPU
+solver_mode: CPU

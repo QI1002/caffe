@@ -69,7 +69,8 @@ Classifier::Classifier(const string& model_file,
   input_geometry_ = cv::Size(input_layer->width(), input_layer->height());
 
   /* Load the binaryproto mean file. */
-  SetMean(mean_file);
+  if (mean_file != string("dummy_mean"))
+      SetMean(mean_file);
 
   /* Load labels. */
   std::ifstream labels(label_file.c_str());
@@ -214,7 +215,10 @@ void Classifier::Preprocess(const cv::Mat& img,
     sample_resized.convertTo(sample_float, CV_32FC1);
 
   cv::Mat sample_normalized;
-  cv::subtract(sample_float, mean_, sample_normalized);
+  if (mean_.empty())
+      sample_normalized = sample_float;
+  else
+      cv::subtract(sample_float, mean_, sample_normalized);
 
   /* This operation will write the separate BGR planes directly to the
    * input layer of the network because it is wrapped by the cv::Mat

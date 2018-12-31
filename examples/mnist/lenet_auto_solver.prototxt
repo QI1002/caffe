@@ -7,6 +7,7 @@ test_net: "mnist/lenet_auto_test.prototxt"
 test_iter: 100
 # Carry out testing every 500 training iterations.
 test_interval: 500
+test_initialization: false
 # The base learning rate, momentum and the weight decay of the network.
 base_lr: 0.01
 momentum: 0.9
@@ -22,3 +23,4 @@ max_iter: 10000
 # snapshot intermediate results
 snapshot: 5000
 snapshot_prefix: "mnist/lenet"
+debug_info: true
