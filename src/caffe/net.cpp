@@ -62,7 +62,9 @@ void Net<Dtype>::Init(const NetParameter& in_param) {
   NetParameter param;
   InsertSplits(filtered_param, &param);
   // Basically, build all the layers and set up their connections.
-  name_ = param.name();
+  char addr_string[16];
+  sprintf(addr_string, "%p", this);
+  name_ = param.name() + "addr = " + string(addr_string);
   map<string, int> blob_name_to_idx;
   set<string> available_blobs;
   memory_used_ = 0;

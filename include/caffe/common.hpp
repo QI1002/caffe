@@ -163,6 +163,8 @@ class Caffe {
   inline static void set_solver_count(int val) { Get().solver_count_ = val; }
   inline static bool root_solver() { return Get().root_solver_; }
   inline static void set_root_solver(bool val) { Get().root_solver_ = val; }
+  // set glog output directory
+  static void SetLogDir(const char* application_name, const char* log_dir);
 
  protected:
 #ifndef CPU_ONLY

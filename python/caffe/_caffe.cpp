@@ -287,6 +287,7 @@ BOOST_PYTHON_MODULE(_caffe) {
   bp::def("set_mode_gpu", &set_mode_gpu);
   bp::def("set_random_seed", &set_random_seed);
   bp::def("set_device", &Caffe::SetDevice);
+  bp::def("set_logdir", &Caffe::SetLogDir);
 
   bp::def("layer_type_list", &LayerRegistry<Dtype>::LayerTypeList);
 
@@ -312,6 +313,8 @@ BOOST_PYTHON_MODULE(_caffe) {
     .def("_bottom_ids", bp::make_function(&Net<Dtype>::bottom_ids,
         bp::return_value_policy<bp::copy_const_reference>()))
     .def("_top_ids", bp::make_function(&Net<Dtype>::top_ids,
+        bp::return_value_policy<bp::copy_const_reference>()))
+    .add_property("name", bp::make_function(&Net<Dtype>::name,
         bp::return_value_policy<bp::copy_const_reference>()))
     .add_property("_blobs", bp::make_function(&Net<Dtype>::blobs,
         bp::return_internal_reference<>()))

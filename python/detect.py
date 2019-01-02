@@ -25,7 +25,7 @@ import caffe
 
 CROP_MODES = ['list', 'selective_search']
 COORD_COLS = ['ymin', 'xmin', 'ymax', 'xmax']
-
+NUM_OUTPUT = 200
 
 def main(argv):
     pycaffe_dir = os.path.dirname(__file__)
@@ -159,7 +159,8 @@ def main(argv):
         # Enumerate the class probabilities.
         class_cols = ['class{}'.format(x) for x in range(NUM_OUTPUT)]
         df[class_cols] = pd.DataFrame(
-            data=np.vstack(df['feat']), index=df.index, columns=class_cols)
+            data=np.vstack(df['prediction']), index=df.index, columns=class_cols)
+        #del(df['prediction'])
         df.to_csv(args.output_file, cols=COORD_COLS + class_cols)
     else:
         # h5

@@ -83,7 +83,8 @@ class Detector(caffe.Net):
         for ix, window_in in enumerate(window_inputs):
             caffe_in[ix] = self.transformer.preprocess(in_, window_in)
         out = self.forward_all(**{in_: caffe_in})
-        predictions = out[self.outputs[0]]
+        #predictions = out[self.outputs[0]]
+        predictions = out[self.outputs[0]].squeeze()
 
         # Package predictions with images and windows.
         detections = []
@@ -99,6 +100,38 @@ class Detector(caffe.Net):
         return detections
 
     def detect_selective_search(self, image_fnames):
+        """
+        Do windowed detection over Selective Search proposals by extracting
+        the crop and warping to the input dimensions of the net.
+
+        Parameters
+        ----------
+        image_fnames: list
+
+        Returns
+        -------
+        detections: list of {filename: image filename, window: crop coordinates,
+            predictions: prediction vector} dicts.
+        """
+        import selectivesearch
+        # Make absolute paths so MATLAB can find the files.
+        image_fnames = [os.path.abspath(f) for f in image_fnames]
+
+        img = caffe.io.load_image(image_fnames[0]).astype(np.float32)
+        _, regions = selectivesearch.selective_search(img, scale = 500, sigma=0.5, min_size=64)
+
+        rects = list()
+        for region in regions:
+            rect = region['rect']
+            rects.append((rect[1], rect[0], rect[3]+rect[1], rect[2]+rect[0]))
+
+        rects = list(set(rects))
+        windows_list = list([np.asarray(rects)])
+
+        # Run windowed detection on the selective search list.
+        return self.detect_windows(zip(image_fnames, windows_list))
+
+    def detect_selective_search_matlab(self, image_fnames):
         """
         Do windowed detection over Selective Search proposals by extracting
         the crop and warping to the input dimensions of the net.

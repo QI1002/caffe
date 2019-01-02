@@ -57,6 +57,11 @@ Caffe::Caffe()
 
 Caffe::~Caffe() { }
 
+void Caffe::SetLogDir(const char* application_name, const char* log_dir) {
+    ::google::InitGoogleLogging(application_name);
+    FLAGS_log_dir = log_dir;
+}
+
 void Caffe::set_random_seed(const unsigned int seed) {
   // RNG seed
   Get().random_generator_.reset(new RNG(seed));
@@ -126,6 +131,11 @@ Caffe::~Caffe() {
   if (curand_generator_) {
     CURAND_CHECK(curandDestroyGenerator(curand_generator_));
   }
+}
+
+void Caffe::SetLogDir(const char* application_name, const char* log_dir) {
+    ::google::InitGoogleLogging(application_name);
+    FLAGS_log_dir = log_dir;
 }
 
 void Caffe::set_random_seed(const unsigned int seed) {

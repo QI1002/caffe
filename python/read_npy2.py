@@ -2,7 +2,6 @@
 """
 read *.npy which is the output of classify.py
 """
-
 import numpy as np
 import os 
 import os.path
@@ -19,8 +18,8 @@ if not os.path.isfile(sys.argv[1]) or not os.access(sys.argv[1], os.R_OK):
 array_loaded = np.load(sys.argv[1])
 #print 'Loaded: ', array_loaded
 
-filename = '../data/ilsvrc12/synset_words.txt'
-if not os.path.isfile(filename) or not os.access(sys.argv[1], os.R_OK):
+filename = '../data/ilsvrc12/det_synset_words.txt'
+if not os.path.isfile(filename) or not os.access(filename, os.R_OK):
     print 'file ', filename, ' is missing or is not readable'
     sys.exit()
 
@@ -33,6 +32,7 @@ for j in range(0, 5):
             max_index = i
 
     i = 0
+
     f = file(filename)
     while True:
         line = f.readline()
