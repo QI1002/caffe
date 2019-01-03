@@ -298,7 +298,7 @@ def load_image(filename, color=True):
         of size (H x W x 3) in RGB or
         of size (H x W x 1) in grayscale.
     """
-    img = skimage.img_as_float(skimage.io.imread(filename, as_grey=not color)).astype(np.float32)
+    img = skimage.img_as_float(skimage.io.imread(filename, as_gray=not color)).astype(np.float32)
     if img.ndim == 2:
         img = img[:, :, np.newaxis]
         if color:
@@ -328,7 +328,7 @@ def resize_image(im, new_dims, interp_order=1):
             # skimage is fast but only understands {1,3} channel images
             # in [0, 1].
             im_std = (im - im_min) / (im_max - im_min)
-            resized_std = resize(im_std, new_dims, order=interp_order)
+            resized_std = resize(im_std, new_dims, anti_aliasing=True, mode='constant', order=interp_order)
             resized_im = resized_std * (im_max - im_min) + im_min
         else:
             # the image is a constant -- avoid divide by 0
