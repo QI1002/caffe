@@ -19,7 +19,7 @@ import caffe
 #caffe.set_logdir(sys.argv[0], os.path.abspath('./log'))
 
 model_def = 'deploy.prototxt'
-model_weights = 'voc-fcn8s-obg8s.caffemodel'
+model_weights = 'voc-fcn8s-obg2s.caffemodel'
 
 net = caffe.Net(model_def,      # defines the structure of the model
                 model_weights,  # contains the trained weights
@@ -36,7 +36,7 @@ transformer.set_mean('data', mu)            # subtract the dataset-mean value in
 transformer.set_raw_scale('data', 255)      # rescale from [0, 1] to [0, 255]
 transformer.set_channel_swap('data', (2,1,0))  # swap channels from RGB to BGR
 
-image = caffe.io.load_image('2007_000129.jpg')
+image = caffe.io.load_image('2007_000133.jpg')
 
 transformed_image = transformer.preprocess('data', image)
 #plt.imshow(image)

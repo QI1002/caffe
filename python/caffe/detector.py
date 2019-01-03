@@ -83,7 +83,7 @@ class Detector(caffe.Net):
         for ix, window_in in enumerate(window_inputs):
             caffe_in[ix] = self.transformer.preprocess(in_, window_in)
         out = self.forward_all(**{in_: caffe_in})
-        #predictions = out[self.outputs[0]]
+        #predictions = out[self.outputs[0]].squeeze(axis=(2, 3))
         predictions = out[self.outputs[0]].squeeze()
 
         # Package predictions with images and windows.
@@ -118,7 +118,7 @@ class Detector(caffe.Net):
         image_fnames = [os.path.abspath(f) for f in image_fnames]
 
         img = caffe.io.load_image(image_fnames[0]).astype(np.float32)
-        _, regions = selectivesearch.selective_search(img, scale = 500, sigma=0.5, min_size=64)
+        _, regions = selectivesearch.selective_search(img, scale = 500, sigma=0.9, min_size=64)
 
         rects = list()
         for region in regions:

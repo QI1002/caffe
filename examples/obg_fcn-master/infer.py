@@ -1,10 +1,10 @@
 import numpy as np
 from PIL import Image
 
-caffe_root = '../../..'
-import sys, os 
-sys.path.insert(0, cafe_root + 'python')
+caffe_root = '../../'
 
+import sys, os 
+sys.path.insert(0, caffe_root + 'python')
 import caffe
 
 caffe.set_logdir(sys.argv[0], os.path.abspath('./log'))
@@ -28,7 +28,7 @@ out = net.blobs['score'].data[0].argmax(axis=0)
 
 #print str(out)
 class_num = {}
-for i in range(0, out.shap[0]):
+for i in range(0, out.shape[0]):
     for j in range(0, out.shape[1]):
         if out[i][j] in class_num.keys(): 
             class_num[out[i][j]] += 1

@@ -3,10 +3,13 @@ import tempfile
 import os
 import six
 
-# The caffe module needs to be on the Python path; we'll add it here explicitly
+# The caffe module needs to be on the Python path; we'll add it here explicitly.
 import sys
-sys.path.insert(0, '../../../python')
+caffe_root = '../../../python' 
+sys.path.insert(0, caffe_root)
+
 import caffe
+
 
 class SimpleLayer(caffe.Layer):
     """A layer that just multiplies by ten"""
@@ -171,3 +174,4 @@ class TestPythonLayer(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+

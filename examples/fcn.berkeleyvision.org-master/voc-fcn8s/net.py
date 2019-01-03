@@ -1,7 +1,8 @@
 
-caffe_root = '../../..'
+caffe_root = '../../../'
+
 import sys
-sys.path.insert(0, cafe_root + 'python')
+sys.path.insert(0, caffe_root + 'python')
 
 import caffe
 from caffe import layers as L, params as P
