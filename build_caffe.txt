@@ -63,9 +63,12 @@ I. download hdf5 and build it or apt-get to install
 #sudo apt-get install libhdf5-dev
 https://www.hdfgroup.org/HDF5/release/obtainsrc.html
 https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.4/src/hdf5-1.10.4.tar.bz2
-mkdir install && make build && cd build
-cmake -DCMAKE_INSTALL_PREFIX=../install ..
-make install
+mkdir install 
+./configure --enable-cxx --enable-fortran --prefix=/home/qi/github/caffe/lib/hdf5-1.10.4/install
+make -j8 install
+#mkdir install && make build && cd build
+#cmake -DCMAKE_INSTALL_PREFIX=../install -DHDF5_BUILD_FORTRAN=ON ..
+#make install
 #-DHDF5_FIND_DEBUG=ON -DCPU_ONLY=ON ..
 
 J. download atlas and build it  
@@ -143,6 +146,9 @@ sudo apt-get install graphviz
 #sudo pip install pandas
 sudo pip install pydotplus
 
+sudo pip install h5py
+sudo pip install sklearn
+
 D. set python path or patch for access caffe & protobuf python 
 source python/env.sh 
 
@@ -207,3 +213,50 @@ cmake -DPROTOBUF_INCLUDE_DIR=/home/qi/github/caffe/lib/protobuf-3.0.0/src
       -DCMAKE_BUILD_TYPE=Debug 
       -DCPU_ONLY=ON ..
 
+=======================================================================================================================================
+
+7. notebook study (0. related *.ipynb 1. prebuilt steps 2. log dir 3. run test 4. study )
+
+A. 00-classification.ipynb
+>> ./img_show.py           	: use pyplot to show image file 
+>> ./img_classification.py 	: use caffenet to classify, and display image, 36x11x11x3 conv1 image from 96x3x11x11 weight, 
+                                    36x55x55 conv1 blob image from 96x55x55, 256x6x6 pool5 blob image and 1x4096 fc6 blob image and 
+                                    it's histgram except 0 and finally softmax 1x1000 probility image 
+TODO: how to change the function vis_square to show 12x8 for 96x11x11x3 images  
+  
+B. 01-learning-lenet.ipynb 
+./examples/mnist/create_mnist.sh 
+./examples/mnist/train_lenet.sh 
+>> ./lenet.py			: study TODO, just show conv parameter ? 
+>> ./lenet-train.py	  	: study TODO, train or use solver to detect ? the traning diagram of it is not obvious  
+
+C. mnist/mnist_siamese.ipynb
+./examples/siamese/create_mnist_siamese.sh 
+./examples/siamese/train_mnist_siamese.sh 
+>> ./siamese.py 		: study TODO
+
+D. brewing-logreg.ipynb
+./build/tools/caffe-d train -solver examples/hdf5_classification/logreg_solver.prototxt
+./build/tools/caffe-d train -solver examples/hdf5_classification/nonlinear_logreg_solver.prototxt
+>> ./off-the-shelf-sgd1.py 	: study TODO
+>> ./off-the-shelf-sgd2.py 	: study TOTO
+
+E. net_surgery.ipynb            
+>> ./caffenet_full_conv.py 	: study TOTO
+>> ./net_surgery.py        	: study TOTO, show the cat and filter 
+ 
+F. 02-fine-tuning.ipynb
+python examples/finetune_flickr_style/assemble_data.py --workers=-1 --seed=1701 --images=2000 --label=5
+>> ./style_recognition.py       : study TODO
+>> ./style_recognition_train.py	: study TODO
+
+G. pascal-multilabel-with-datalayer.ipynb
+>> ./pascal.py      		: study TOTO
+>> ./pascal-train.py    	: study TOTO
+
+H. detection.ipynb
+mkdir rcnn_temp && echo ../images/fish-bike.jpg > _temp/det_input.txt
+python ../../python/detect.py --crop_mode=selective_search --pretrained_model=../../models/bvlc_reference_rcnn_ilsvrc13/bvlc_reference_rcnn_ilsvrc13.caffemodel --model_def=../../models/bvlc_reference_rcnn_ilsvrc13/deploy.prototxt --raw_scale=255 rcnn_temp/det_input.txt _temp/det_output.h5
+>> python ./rcnn.py      	: study TOTO, show 3 times rcnn result
+
+TODO: check log error or warning 

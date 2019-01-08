@@ -270,7 +270,8 @@ def run_solvers(niter, solvers, disp_interval=10):
                                   for n, _ in solvers)
             print '%3d) %s' % (it, loss_disp)     
     # Save the learned weights from both nets.
-    weight_dir = tempfile.mkdtemp()
+    #weight_dir = tempfile.mkdtemp()
+    weight_dir = '../finetune_flickr_style/'
     weights = {}
     for name, s in solvers:
         filename = 'weights.%s.caffemodel' % name
@@ -343,13 +344,13 @@ scratch_style_solver = caffe.get_solver(scratch_style_solver_filename)
 scratch_style_solver.net.copy_from(scratch_style_weights)
 
 print 'Running solvers for %d iterations...' % niter
-solvers = [('pretrained, end-to-end', style_solver),
-           ('scratch, end-to-end', scratch_style_solver)]
+solvers = [('pretrained-end-to-end', style_solver),
+           ('scratch-end-to-end', scratch_style_solver)]
 _, _, finetuned_weights = run_solvers(niter, solvers)
 print 'Done.'
 
-style_weights_ft = finetuned_weights['pretrained, end-to-end']
-scratch_style_weights_ft = finetuned_weights['scratch, end-to-end']
+style_weights_ft = finetuned_weights['pretrained-end-to-end']
+scratch_style_weights_ft = finetuned_weights['scratch-end-to-end']
 
 # Delete solvers to save memory.
 del style_solver, scratch_style_solver, solvers

@@ -10,7 +10,10 @@ os.chdir('../../')
 import sys
 sys.path.insert(0, './python')
 import caffe
-
+# Create target Directory if don't exist
+dirname = os.path.abspath('./examples/notebook/sgd2-log')
+if not os.path.exists(dirname): os.mkdir(dirname)
+caffe.set_logdir(sys.argv[0], dirname)
 
 import os
 import h5py
@@ -29,7 +32,7 @@ X, y = sklearn.datasets.make_classification(
 )
 
 # Split into train and test
-X, Xt, y, yt = sklearn.cross_validation.train_test_split(X, y)
+X, Xt, y, yt = sklearn.model_selection.train_test_split(X, y)
 
 # Visualize sample of the data
 ind = np.random.permutation(X.shape[0])[:1000]
@@ -38,7 +41,7 @@ _ = pd.scatter_matrix(df, figsize=(9, 9), diagonal='kde', marker='o', s=40, alph
 
 # Train and test the scikit-learn SGD logistic regression.
 clf = sklearn.linear_model.SGDClassifier(
-    loss='log', n_iter=1000, penalty='l2', alpha=5e-4, class_weight='auto')
+    loss='log', n_iter=1000, penalty='l2', alpha=5e-4, class_weight='balanced')
 
 clf.fit(X, y)
 yt_pred = clf.predict(Xt)
@@ -162,7 +165,7 @@ accuracy /= test_iters
 
 print("Accuracy: {:.3f}".format(accuracy))
 
-#!./build/tools/caffe train -solver examples/hdf5_classification/nonlinear_logreg_solver.prototxt
+#!./build/tools/caffe-d train -solver examples/hdf5_classification/nonlinear_logreg_solver.prototxt
 
 # Clean up (comment this out if you want to examine the hdf5_classification/data directory).
 #shutil.rmtree(dirname)

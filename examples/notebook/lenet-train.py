@@ -47,6 +47,10 @@ with open('mnist/lenet_auto_test.prototxt', 'w') as f:
 
 #caffe.set_device(0)
 #caffe.set_mode_gpu()
+# Create target Directory if don't exist
+dirname = os.path.abspath('./notebook/lenet-train-log')
+if not os.path.exists(dirname): os.mkdir(dirname)
+caffe.set_logdir(sys.argv[0], dirname)
 
 ### load the solver and create train and test nets
 solver = None  # ignore this workaround for lmdb data (can't instantiate two solvers on the same data)
@@ -76,10 +80,8 @@ solver.test_nets[0].forward()  # test net (there can be more than one)
 #       .transpose(0, 2, 1, 3).reshape(4*5, 5*5), cmap='gray'); axis('off')
 #show()
 
-#niter = 200
-#test_interval = 25
-niter = 25
-test_interval = 5
+niter = 200
+test_interval = 25
 # losses will also be stored in the log
 train_loss = zeros(niter)
 test_acc = zeros(int(np.ceil(niter / test_interval)))
@@ -117,20 +119,17 @@ ax1.set_xlabel('iteration')
 ax1.set_ylabel('train loss')
 ax2.set_ylabel('test accuracy')
 ax2.set_title('Test Accuracy: {:.2f}'.format(test_acc[-1]))
+show()
 
 for i in range(8):
-    figure(figsize=(2, 2))
+    figure(figsize=(10, 6))
+    plt.subplot(3, 1, 1)
     imshow(solver.test_nets[0].blobs['data'].data[i, 0], cmap='gray')
-    figure(figsize=(10, 2))
+    plt.subplot(3, 1, 2)
     imshow(output[:50, i].T, interpolation='nearest', cmap='gray')
     xlabel('iteration')
     ylabel('label')
-    show()
-
-for i in range(8):
-    figure(figsize=(2, 2))
-    imshow(solver.test_nets[0].blobs['data'].data[i, 0], cmap='gray')
-    figure(figsize=(10, 2))
+    plt.subplot(3, 1, 3)
     imshow(exp(output[:50, i].T) / exp(output[:50, i].T).sum(0), interpolation='nearest', cmap='gray')
     xlabel('iteration')
     ylabel('label')

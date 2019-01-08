@@ -204,10 +204,10 @@ class Detector(caffe.Net):
 
             # collect with context padding and place in input
             # with mean padding
-            context_crop = im[box[0]:box[2], box[1]:box[3]]
+            context_crop = im[int(box[0]):int(box[2]), int(box[1]):int(box[3])]
             context_crop = caffe.io.resize_image(context_crop, (crop_h, crop_w))
             crop = np.ones(self.crop_dims, dtype=np.float32) * self.crop_mean
-            crop[pad_y:(pad_y + crop_h), pad_x:(pad_x + crop_w)] = context_crop
+            crop[int(pad_y):int(pad_y + crop_h), int(pad_x):int(pad_x + crop_w)] = context_crop
 
         return crop
 

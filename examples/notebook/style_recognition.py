@@ -2,9 +2,14 @@
 
 caffe_root = '../../'  # this file should be run from {caffe_root}/examples (otherwise change this line)
 
-import sys
+import os, sys
 sys.path.insert(0, caffe_root + 'python')
 import caffe
+
+# Create target Directory if don't exist
+dirname = os.path.abspath('./style-log')
+if not os.path.exists(dirname): os.mkdir(dirname)
+caffe.set_logdir(sys.argv[0], dirname)
 
 #caffe.set_device(0)
 #caffe.set_mode_gpu()
@@ -260,8 +265,8 @@ def eval_style_net(weights, test_iters=10):
     accuracy /= test_iters
     return test_net, accuracy
 
-style_weights_ft = caffe_root + 'examples/notebook/flickr_style_recognition/weights.pretrained, end-to-end.caffemodel'
-scratch_style_weights_ft = caffe_root + 'examples/notebook/flickr_style_recognition/weights.scratch, end-to-end.caffemodel'
+style_weights_ft = caffe_root + 'examples/finetune_flickr_style/weights.pretrained-end-to-end.caffemodel'
+scratch_style_weights_ft = caffe_root + 'examples/finetune_flickr_style/weights.scratch-end-to-end.caffemodel'
 
 test_net, accuracy = eval_style_net(style_weights_ft)
 print 'Accuracy, finetuned from ImageNet initialization: %3.1f%%' % (100*accuracy, )

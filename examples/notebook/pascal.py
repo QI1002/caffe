@@ -15,6 +15,10 @@ plt.rcParams['figure.figsize'] = (6, 6)
 caffe_root = '../../'  # this file is expected to be in {caffe_root}/examples
 sys.path.append(caffe_root + 'python')
 import caffe # If you get "No module named _caffe", either you have not built pycaffe or you have the wrong path.
+# Create target Directory if don't exist
+dirname = os.path.abspath('./pascal-log')
+if not os.path.exists(dirname): os.mkdir(dirname)
+caffe.set_logdir(sys.argv[0], dirname)
 
 from caffe import layers as L, params as P # Shortcuts to define the net prototxt.
 

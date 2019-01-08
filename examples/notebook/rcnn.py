@@ -1,13 +1,24 @@
 #!/usr/bin/env python
 
-import sys
+import os, sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 #%matplotlib inline
 
+# Make sure that caffe is on the python path:
+caffe_root = '../../'  # this file is expected to be in {caffe_root}/examples
+import os, sys
+sys.path.insert(0, caffe_root + 'python')
+
+import caffe
+# Create target Directory if don't exist
+dirname = os.path.abspath('./rcnn-log')
+if not os.path.exists(dirname): os.mkdir(dirname)
+caffe.set_logdir(sys.argv[0], dirname)
+
 if (len(sys.argv) <= 1):
-    df = pd.read_hdf('../rcnn_temp/list_output.h5', 'df')
+    df = pd.read_hdf('./rcnn_temp/det_output.h5', 'df')
 else:
     if sys.argv[1].lower().endswith('csv'):
         df = pd.read_csv(sys.argv[1])
@@ -27,18 +38,18 @@ with open('../../data/ilsvrc12/det_synset_words.txt') as f:
         }
         for l in f.readlines()
     ])
-labels_df.sort('synset_id')
+labels_df.sort_values('synset_id')
 predictions_df = pd.DataFrame(np.vstack(df.prediction.values), columns=labels_df['name'])
 print(predictions_df.iloc[0])
 
-plt.gray()
-plt.matshow(predictions_df.values)
+#plt.gray()
+plt.matshow(predictions_df.values, cmap=plt.cm.gray)
 plt.xlabel('Classes')
 plt.ylabel('Windows')
 plt.show()
 
 max_s = predictions_df.max(0)
-max_s.sort(ascending=False)
+max_s.sort_values(ascending=False)
 print(max_s[:10])
 
 # Find, print, and display the top detections: person and bicycle.
@@ -48,13 +59,13 @@ j = predictions_df['bicycle'].argmax()
 # Show top predictions for top detection.
 f = pd.Series(df['prediction'].iloc[i], index=labels_df['name'])
 print('Top detection:')
-print(f.order(ascending=False)[:5])
+print(f.sort_values(ascending=False)[:5])
 print('')
 
 # Show top predictions for second-best detection.
 f = pd.Series(df['prediction'].iloc[j], index=labels_df['name'])
 print('Second-best detection:')
-print(f.order(ascending=False)[:5])
+print(f.sort_values(ascending=False)[:5])
 
 # Show top detection in red, second-best top detection in blue.
 im = plt.imread('../images/fish-bike.jpg')

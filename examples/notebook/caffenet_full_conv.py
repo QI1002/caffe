@@ -2,10 +2,14 @@
 
 # Make sure that caffe is on the python path:
 caffe_root = '../../'  # this file is expected to be in {caffe_root}/examples
-import sys
+import os, sys
 sys.path.insert(0, caffe_root + 'python')
 
 import caffe
+# Create target Directory if don't exist
+dirname = os.path.abspath('./fullconv-log')
+if not os.path.exists(dirname): os.mkdir(dirname)
+caffe.set_logdir(sys.argv[0], dirname)
 
 # Load the original network and extract the fully connected layers' parameters.
 net = caffe.Net('../../models/bvlc_reference_caffenet/deploy.prototxt', 

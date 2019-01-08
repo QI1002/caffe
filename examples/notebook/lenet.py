@@ -47,7 +47,10 @@ with open('mnist/lenet_auto_test.prototxt', 'w') as f:
 
 #caffe.set_device(0)
 #caffe.set_mode_gpu()
-caffe.set_logdir(sys.argv[0], os.path.abspath('./notebook/log'))
+# Create target Directory if don't exist
+dirname = os.path.abspath('./notebook/lenet-log')
+if not os.path.exists(dirname): os.mkdir(dirname)
+caffe.set_logdir(sys.argv[0], dirname)
 
 ### load the solver and create train and test nets
 solver = None  # ignore this workaround for lmdb data (can't instantiate two solvers on the same data)
@@ -80,4 +83,4 @@ imshow(solver.net.params['conv1'][0].diff[:, 0].reshape(4, 5, 5, 5)
        .transpose(0, 2, 1, 3).reshape(4*5, 5*5), cmap='gray'); axis('off')
 show()
 
-np.save("conv.npy", solver.net.params['conv1'][0].diff[:, 0])
+#np.save("conv.npy", solver.net.params['conv1'][0].diff[:, 0])
