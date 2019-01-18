@@ -15,7 +15,7 @@
 #include "caffe/proto/caffe.pb.h"
 #include "caffe/util/db.hpp"
 #include "caffe/util/io.hpp"
-#include "caffe/vision_layers.hpp"
+//#include "caffe/vision_layers.hpp"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
