@@ -45,8 +45,11 @@ with open('mnist/lenet_auto_train.prototxt', 'w') as f:
 with open('mnist/lenet_auto_test.prototxt', 'w') as f:
     f.write(str(lenet('mnist/mnist_test_lmdb', 100)))
 
-#caffe.set_device(0)
-#caffe.set_mode_gpu()
+#default is cpu mode
+caffe.set_device(0)
+caffe.set_mode_gpu()
+#caffe.set_mode_cpu()
+
 # Create target Directory if don't exist
 dirname = os.path.abspath('./notebook/lenet-train-log')
 if not os.path.exists(dirname): os.mkdir(dirname)

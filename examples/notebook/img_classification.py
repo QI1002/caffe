@@ -32,7 +32,10 @@ else:
     print 'Downloading pre-trained CaffeNet model...'
     #!../scripts/download_model_binary.py ../models/bvlc_reference_caffenet
 
-caffe.set_mode_cpu()
+#default is cpu mode
+caffe.set_device(0)
+caffe.set_mode_gpu()
+#caffe.set_mode_cpu()
 
 model_def = caffe_root + 'models/bvlc_reference_caffenet/deploy.prototxt'
 model_weights = caffe_root + 'models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel'

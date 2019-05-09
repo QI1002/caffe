@@ -12,6 +12,12 @@ import os, sys
 sys.path.insert(0, caffe_root + 'python')
 
 import caffe
+
+#default is cpu mode
+caffe.set_device(0)
+caffe.set_mode_gpu()
+#caffe.set_mode_cpu()
+
 # Create target Directory if don't exist
 dirname = os.path.abspath('./rcnn-log')
 if not os.path.exists(dirname): os.mkdir(dirname)

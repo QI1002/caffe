@@ -257,10 +257,16 @@ F. 02-fine-tuning.ipynb
 python examples/finetune_flickr_style/assemble_data.py --workers=-1 --seed=1701 --images=2000 --label=5
 >> ./style_recognition.py       : study TODO
 >> ./style_recognition_train.py	: study TODO
+F0509 17:10:45.532166 17630 sgd_solver.cu:19] Check failed: error == cudaSuccess (9 vs. 0)  invalid configuration argument
+*** Check failure stack trace: ***
+Aborted (core dumped)
 
 G. pascal-multilabel-with-datalayer.ipynb
 >> ./pascal.py      		: study TOTO
+F0509 17:05:13.053627 17566 relu_layer.cu:26] Check failed: error == cudaSuccess (9 vs. 0)  invalid configuration argument   
 >> ./pascal-train.py    	: study TOTO
+F0509 17:11:51.099195 17695 relu_layer.cu:26] Check failed: error == cudaSuccess (9 vs. 0)  invalid configuration argument
+*** Check failure stack trace: ***
 
 H. detection.ipynb
 mkdir rcnn_temp && echo ../images/fish-bike.jpg > _temp/det_input.txt

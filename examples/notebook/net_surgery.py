@@ -22,7 +22,10 @@ plt.rcParams['image.interpolation'] = 'nearest'
 plt.rcParams['image.cmap'] = 'gray'
 
 # Load the net, list its data and params, and filter an example image.
-caffe.set_mode_cpu()
+#default is cpu mode
+caffe.set_device(0)
+caffe.set_mode_gpu()
+#caffe.set_mode_cpu()
 net = caffe.Net('../net_surgery/conv.prototxt', caffe.TEST)
 print("blobs {}\nparams {}".format(net.blobs.keys(), net.params.keys()))
 

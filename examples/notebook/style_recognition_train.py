@@ -2,12 +2,18 @@
 
 caffe_root = '../../'  # this file should be run from {caffe_root}/examples (otherwise change this line)
 
-import sys
+import sys, os
 sys.path.insert(0, caffe_root + 'python')
 import caffe
 
-#caffe.set_device(0)
-#caffe.set_mode_gpu()
+dirname = os.path.abspath('./style-train-log')
+if not os.path.exists(dirname): os.mkdir(dirname)
+caffe.set_logdir(sys.argv[0], dirname)
+
+#default is cpu mode
+caffe.set_device(0)
+caffe.set_mode_gpu()
+#caffe.set_mode_cpu()
 
 import numpy as np
 from pylab import *

@@ -44,9 +44,10 @@ if not os.path.isfile(caffe_root + 'models/bvlc_reference_caffenet/bvlc_referenc
     print("Downloading pre-trained CaffeNet model...")
     #!../scripts/download_model_binary.py ../models/bvlc_reference_caffenet
 
-# initialize caffe for gpu mode
-#caffe.set_mode_gpu()
-#caffe.set_device(0)
+#default is cpu mode
+caffe.set_device(0)
+caffe.set_mode_gpu()
+#caffe.set_mode_cpu()
 
 # helper function for common structures
 def conv_relu(bottom, ks, nout, stride=1, pad=0, group=1):

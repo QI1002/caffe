@@ -19,7 +19,12 @@ siamese_root = '../siamese/'
 MODEL_FILE = siamese_root + 'mnist_siamese.prototxt'
 # decrease if you want to preview during training
 PRETRAINED_FILE = siamese_root + 'mnist_siamese_iter_50000.caffemodel' 
-caffe.set_mode_cpu()
+
+
+#default is cpu mode
+caffe.set_device(0)
+caffe.set_mode_gpu()
+#caffe.set_mode_cpu()
 net = caffe.Net(MODEL_FILE, PRETRAINED_FILE, caffe.TEST)
 
 TEST_DATA_FILE = caffe_root + 'data/mnist/t10k-images-idx3-ubyte'

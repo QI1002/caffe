@@ -15,6 +15,10 @@ plt.rcParams['figure.figsize'] = (6, 6)
 caffe_root = '../../'  # this file is expected to be in {caffe_root}/examples
 sys.path.append(caffe_root + 'python')
 import caffe # If you get "No module named _caffe", either you have not built pycaffe or you have the wrong path.
+# Create target Directory if don't exist
+dirname = os.path.abspath('./pascal-train-log')
+if not os.path.exists(dirname): os.mkdir(dirname)
+caffe.set_logdir(sys.argv[0], dirname)
 
 from caffe import layers as L, params as P # Shortcuts to define the net prototxt.
 
@@ -40,9 +44,10 @@ if not os.path.isfile(caffe_root + 'models/bvlc_reference_caffenet/bvlc_referenc
     print("Downloading pre-trained CaffeNet model...")
     #!../scripts/download_model_binary.py ../models/bvlc_reference_caffenet
 
-# initialize caffe for gpu mode
-#caffe.set_mode_gpu()
-#caffe.set_device(0)
+#default is cpu mode
+caffe.set_device(0)
+caffe.set_mode_gpu()
+#caffe.set_mode_cpu()
 
 # helper function for common structures
 def conv_relu(bottom, ks, nout, stride=1, pad=0, group=1):

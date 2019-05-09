@@ -145,7 +145,10 @@ solver_path = 'examples/hdf5_classification/logreg_solver.prototxt'
 with open(solver_path, 'w') as f:
     f.write(str(solver(train_net_path, test_net_path)))
 
-caffe.set_mode_cpu()
+#default is cpu mode
+caffe.set_device(0)
+caffe.set_mode_gpu()
+#caffe.set_mode_cpu()
 solver = caffe.get_solver(solver_path)
 solver.solve()
 
