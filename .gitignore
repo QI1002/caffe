@@ -87,6 +87,8 @@ cmake_build
 
 # examples
 examples/cifar10/*.binaryproto
+examples/hdf5_classification/data/*
+examples/notebook/rcnn_temp/*
 
 # Generated documentation
 docs/_site

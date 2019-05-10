@@ -11,8 +11,8 @@ if not os.path.exists(dirname): os.mkdir(dirname)
 caffe.set_logdir(sys.argv[0], dirname)
 
 #default is cpu mode
-caffe.set_device(0)
-caffe.set_mode_gpu()
+#caffe.set_device(0)
+#caffe.set_mode_gpu()
 #caffe.set_mode_cpu()
 
 import numpy as np
