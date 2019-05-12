@@ -153,6 +153,7 @@ class Caffe {
   static void SetDevice(const int device_id);
   // Prints the current GPU status.
   static void DeviceQuery();
+  static void MemInfoQuery(size_t alloc_byte = (size_t)-1);
   // Check if specified device is available
   static bool CheckDevice(const int device_id);
   // Search from start_id to the highest possible device ordinal,

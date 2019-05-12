@@ -75,6 +75,10 @@ void Caffe::DeviceQuery() {
   NO_GPU;
 }
 
+void Caffe::MemInfoQuery() {
+  NO_GPU;
+}
+
 bool Caffe::CheckDevice(const int device_id) {
   NO_GPU;
   return false;
@@ -159,6 +163,9 @@ void Caffe::set_random_seed(const unsigned int seed) {
 void Caffe::SetDevice(const int device_id) {
   int current_device;
   CUDA_CHECK(cudaGetDevice(&current_device));
+  DeviceQuery();
+  MemInfoQuery();
+  
   if (current_device == device_id) {
     return;
   }
@@ -209,6 +216,15 @@ void Caffe::DeviceQuery() {
   LOG(INFO) << "Kernel execution timeout:      "
       << (prop.kernelExecTimeoutEnabled ? "Yes" : "No");
   return;
+}
+
+void Caffe::MemInfoQuery(size_t alloc_byte) {
+  size_t free_byte, total_byte;
+  CUDA_CHECK(cudaMemGetInfo(&free_byte, &total_byte));
+  if ((int)alloc_byte >= 0) 
+      LOG(INFO) << "minfo:alloc=" << alloc_byte << ",free=" << free_byte << ",total=" << total_byte;
+  else 
+      LOG(INFO) << "minfo:free=" << free_byte << ",total=" << total_byte;
 }
 
 bool Caffe::CheckDevice(const int device_id) {
