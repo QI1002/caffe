@@ -223,7 +223,53 @@ cmake -DPROTOBUF_INCLUDE_DIR=/home/qi/github/caffe/lib/protobuf-3.0.0/src
 
 =======================================================================================================================================
 
-7. notebook study (0. related *.ipynb 1. prebuilt steps 2. log dir 3. run test 4. study )
+7. CUDA capability query 
+
+qi@qi-ThinkPad-Edge-E530:~/github/library/NVIDIA_CUDA-8.0_Samples/1_Utilities/deviceQuery$ ./deviceQuery 
+./deviceQuery Starting...
+
+ CUDA Device Query (Runtime API) version (CUDART static linking)
+
+Detected 1 CUDA Capable device(s)
+
+Device 0: "GeForce GT 635M"
+  CUDA Driver Version / Runtime Version          9.1 / 8.0
+  CUDA Capability Major/Minor version number:    2.1
+  Total amount of global memory:                 1985 MBytes (2081751040 bytes)
+  ( 2) Multiprocessors, ( 48) CUDA Cores/MP:     96 CUDA Cores
+  GPU Max Clock rate:                            1320 MHz (1.32 GHz)
+  Memory Clock rate:                             900 Mhz
+  Memory Bus Width:                              128-bit
+  L2 Cache Size:                                 131072 bytes
+  Maximum Texture Dimension Size (x,y,z)         1D=(65536), 2D=(65536, 65535), 3D=(2048, 2048, 2048)
+  Maximum Layered 1D Texture Size, (num) layers  1D=(16384), 2048 layers
+  Maximum Layered 2D Texture Size, (num) layers  2D=(16384, 16384), 2048 layers
+  Total amount of constant memory:               65536 bytes
+  Total amount of shared memory per block:       49152 bytes
+  Total number of registers available per block: 32768
+  Warp size:                                     32
+  Maximum number of threads per multiprocessor:  1536
+  Maximum number of threads per block:           1024
+  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+  Max dimension size of a grid size    (x,y,z): (65535, 65535, 65535)
+  Maximum memory pitch:                          2147483647 bytes
+  Texture alignment:                             512 bytes
+  Concurrent copy and kernel execution:          Yes with 1 copy engine(s)
+  Run time limit on kernels:                     Yes
+  Integrated GPU sharing Host Memory:            No
+  Support host page-locked memory mapping:       Yes
+  Alignment requirement for Surfaces:            Yes
+  Device has ECC support:                        Disabled
+  Device supports Unified Addressing (UVA):      Yes
+  Device PCI Domain ID / Bus ID / location ID:   0 / 1 / 0
+  Compute Mode:
+     < Default (multiple host threads can use ::cudaSetDevice() with device simultaneously) >
+
+deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 9.1, CUDA Runtime Version = 8.0, NumDevs = 1, Device0 = GeForce GT 635M
+
+=======================================================================================================================================
+
+8. notebook study (0. related *.ipynb 1. prebuilt steps 2. log dir 3. run test 4. study )
 
 A. 00-classification.ipynb
 >> ./img_show.py           	: use pyplot to show image file 
@@ -257,15 +303,14 @@ F. 02-fine-tuning.ipynb
 python examples/finetune_flickr_style/assemble_data.py --workers=-1 --seed=1701 --images=2000 --label=5
 >> ./style_recognition.py       : study TODO
 >> ./style_recognition_train.py	: study TODO
-F0509 17:10:45.532166 17630 sgd_solver.cu:19] Check failed: error == cudaSuccess (9 vs. 0)  invalid configuration argument
+F0512 10:56:53.038100 31841 syncedmem.cpp:56] Check failed: error == cudaSuccess (2 vs. 0)  out of memory
 *** Check failure stack trace: ***
 Aborted (core dumped)
 
 G. pascal-multilabel-with-datalayer.ipynb
->> ./pascal.py      		: study TOTO
-F0509 17:05:13.053627 17566 relu_layer.cu:26] Check failed: error == cudaSuccess (9 vs. 0)  invalid configuration argument   
+>> ./pascal.py      		: study TOTO                  
 >> ./pascal-train.py    	: study TOTO
-F0509 17:11:51.099195 17695 relu_layer.cu:26] Check failed: error == cudaSuccess (9 vs. 0)  invalid configuration argument
+F0512 10:56:53.038100 31841 syncedmem.cpp:56] Check failed: error == cudaSuccess (2 vs. 0)  out of memory
 *** Check failure stack trace: ***
 
 H. detection.ipynb
@@ -273,4 +318,6 @@ mkdir rcnn_temp && echo ../images/fish-bike.jpg > _temp/det_input.txt
 python ../../python/detect.py --crop_mode=selective_search --pretrained_model=../../models/bvlc_reference_rcnn_ilsvrc13/bvlc_reference_rcnn_ilsvrc13.caffemodel --model_def=../../models/bvlc_reference_rcnn_ilsvrc13/deploy.prototxt --raw_scale=255 rcnn_temp/det_input.txt _temp/det_output.h5
 >> python ./rcnn.py      	: study TOTO, show 3 times rcnn result
 
-TODO: check log error or warning 
+TODO: check log error or warning
+TODO: find the way to reduce GPU out of memory issue in Caffe 
+https://devtalk.nvidia.com/default/topic/1013464/jetson-tx2/gpu-out-of-memory-when-the-total-ram-usage-is-2-8g/post/5168834/

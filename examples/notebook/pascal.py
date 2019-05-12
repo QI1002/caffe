@@ -45,8 +45,8 @@ if not os.path.isfile(caffe_root + 'models/bvlc_reference_caffenet/bvlc_referenc
     #!../scripts/download_model_binary.py ../models/bvlc_reference_caffenet
 
 #default is cpu mode
-#caffe.set_device(0)
-#caffe.set_mode_gpu()
+caffe.set_device(0)
+caffe.set_mode_gpu()
 #caffe.set_mode_cpu()
 
 # helper function for common structures

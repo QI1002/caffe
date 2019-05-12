@@ -82,7 +82,8 @@ const char* cublasGetErrorString(cublasStatus_t error);
 const char* curandGetErrorString(curandStatus_t error);
 
 // CUDA: use 512 threads per block
-const int CAFFE_CUDA_NUM_THREADS = 512;
+//const int CAFFE_CUDA_NUM_THREADS = 512;
+const int CAFFE_CUDA_NUM_THREADS = 1024;
 
 // CUDA: number of blocks for threads.
 inline int CAFFE_GET_BLOCKS(const int N) {
